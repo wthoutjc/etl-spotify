@@ -2,8 +2,9 @@
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
-# Extract
+# ETL
 from src.extract import extract
+from src.transform import validate_data
 
 # Tools
 from decouple import config
@@ -14,12 +15,13 @@ import sqlite3
 from sqlalchemy.orm import sessionmaker
 
 # CONSTANTS
-DATABASE_LOCATION = "sqlite:///my_played_tracks.sqlite"
-USER_ID = "psykobaby"
+USER_ID = config('USER_ID')
 CLIENT_ID = config('CLIENT_ID')
 CLIENT_SECRET = config('CLIENT_SECRET')
+REDIRECT_URI = config('REDIRECT_URI')
+
 AUTH_URL = "https://accounts.spotify.com/api/token"
-REDIRECT_URI = "http://localhost:8888/callback/"
+DATABASE_LOCATION = "sqlite:///my_played_tracks.sqlite"
 
 auth_manager = SpotifyOAuth(
         client_id=CLIENT_ID, 
@@ -36,6 +38,7 @@ if __name__ == "__main__":
     recently_played = spotify.current_user_recently_played()
     song_df = extract(recently_played)
 
-    
+    if validate_data(song_df):
+        print("Data valid, proceed to Load stage")
 
     
