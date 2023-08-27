@@ -5,23 +5,10 @@ from spotipy.oauth2 import SpotifyOAuth
 # ETL
 from src.extract import extract
 from src.transform import validate_data
-
-# Tools
-from decouple import config
-
-# DB
-import sqlalchemy
-import sqlite3
-from sqlalchemy.orm import sessionmaker
+from src.load import Database
 
 # CONSTANTS
-USER_ID = config('USER_ID')
-CLIENT_ID = config('CLIENT_ID')
-CLIENT_SECRET = config('CLIENT_SECRET')
-REDIRECT_URI = config('REDIRECT_URI')
-
-AUTH_URL = "https://accounts.spotify.com/api/token"
-DATABASE_LOCATION = "sqlite:///my_played_tracks.sqlite"
+from src.settings import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
 
 auth_manager = SpotifyOAuth(
         client_id=CLIENT_ID, 
@@ -40,5 +27,8 @@ if __name__ == "__main__":
 
     if validate_data(song_df):
         print("Data valid, proceed to Load stage")
+        database = Database(song_df)
+        database.init_db()
+        database.load()
 
     

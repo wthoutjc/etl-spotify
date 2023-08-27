@@ -17,9 +17,10 @@ def extract(recently_played):
     song_dict = {
         "song_name": song_names,
         "artist_name": artist_names,
-        "played_at": played_at_list
+        "played_at": played_at_list,
+        "timestamp": timestamps
     }
 
     # Crear un dataframe
-    song_df = pd.DataFrame(song_dict, columns=["song_name", "artist_name", "played_at"])
+    song_df = pd.DataFrame(song_dict, columns=["song_name", "artist_name", "played_at", "timestamp"])
     return song_df

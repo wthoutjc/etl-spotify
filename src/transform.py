@@ -21,8 +21,8 @@ def validate_data(df_song:'pd.DataFrame') -> bool:
 
     timestamps = df_song["timestamp"].tolist()
     for timestamp in timestamps:
-        if pd.Timestamp(timestamp) != yesterday:
+        if pd.Timestamp(timestamp) < yesterday:
             print("At least one of the returned songs does not have a yesterday's timestamp")
             return False
-    
 
+    return True
