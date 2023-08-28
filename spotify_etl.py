@@ -20,8 +20,7 @@ auth_manager = SpotifyOAuth(
 # Crea un objeto de la API de Spotify con el objeto de autenticación
 spotify = spotipy.Spotify(auth_manager=auth_manager)
 
-if __name__ == "__main__":
-    # Obtener la información de reproducción reciente del usuario
+def run_etl():
     recently_played = spotify.current_user_recently_played()
     song_df = extract(recently_played)
 
@@ -30,5 +29,3 @@ if __name__ == "__main__":
         database = Database(song_df)
         database.init_db()
         database.load()
-
-    
